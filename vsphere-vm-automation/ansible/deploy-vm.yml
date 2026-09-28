@@ -1,0 +1,47 @@
+---
+- name: Deploy VM from template on vCenter
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check that the target IP is not already in use
+      ansible.builtin.command: "ping -c 1 -W 2 {{ vm_ip }}"
+      register: ip_probe
+      changed_when: false
+      failed_when: ip_probe.rc == 0
+      when: check_ip_free | bool
+
+    - name: Clone template and customize
+      community.vmware.vmware_guest:
+        hostname: "{{ vcenter_server }}"
+        username: "{{ vcenter_user }}"
+        password: "{{ vcenter_pass }}"
+        validate_certs: "{{ vcenter_validate_certs }}"
+        name: "{{ vm_name }}"
+        template: "{{ template_name }}"
+        datacenter: "{{ datacenter_name }}"
+        folder: "{{ vm_folder }}"
+        cluster: "{{ cluster_name }}"
+        datastore: "{{ datastore_name }}"
+        hardware:
+          num_cpus: "{{ vm_cpus }}"
+          memory_mb: "{{ vm_memory_mb }}"
+        networks:
+          - name: "{{ vm_network }}"
+            type: static
+            ip: "{{ vm_ip }}"
+            netmask: "{{ vm_netmask }}"
+            gateway: "{{ vm_gateway }}"
+            start_connected: true
+        customization:
+          hostname: "{{ vm_name }}"
+          domain: "{{ vm_domain }}"
+          dns_servers: "{{ vm_dns_servers }}"
+        state: poweredon
+        wait_for_ip_address: true
+        wait_for_customization: true
+      register: vm_result
+      no_log: false   # password is passed via vault var; module masks it in output
+
+    - name: Show result
+      ansible.builtin.debug:
+        msg: "{{ vm_name }} is up at {{ vm_result.instance.ipv4 }}"

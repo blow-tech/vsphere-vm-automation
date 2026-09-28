@@ -1,0 +1,4 @@
+---
+# Create the real file with:  ansible-vault create group_vars/all/vault.yml
+# Contents:
+vcenter_pass: "CHANGE_ME"

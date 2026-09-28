@@ -1,0 +1,22 @@
+# Copy to terraform.tfvars (gitignored). Placeholders only.
+# Prefer exporting the password instead of writing it to a file:
+#   export TF_VAR_vcenter_pass='...'
+
+vcenter_server = "vcenter.example.local"
+vcenter_user   = "svc-terraform@vsphere.local"
+
+datacenter = "Datacenter"
+cluster    = "Cluster"
+datastore  = "datastore-01"
+network    = "vm-network-01"
+template   = "ubuntu-2204-template"
+vm_folder  = "automation-test"
+
+domain      = "example.local"
+dns_servers = ["192.0.2.53", "198.51.100.53"]
+gateway     = "192.0.2.1"
+
+vms = {
+  "vm-demo-01" = { ip = "192.0.2.10" }
+  "vm-demo-02" = { ip = "192.0.2.11", cpus = 4, memory = 8192 }
+}

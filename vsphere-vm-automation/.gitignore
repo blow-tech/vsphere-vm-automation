@@ -1,0 +1,21 @@
+# Secrets
+ansible/group_vars/all/vault.yml
+ansible/group_vars/all/vars.yml
+ansible/inventory/hosts.ini
+.vault_pass
+*.tfvars
+!*.tfvars.example
+.env
+*.pem
+*.key
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+# keep .terraform.lock.hcl committed
+
+# Ansible
+*.retry
+.ansible/

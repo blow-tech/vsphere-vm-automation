@@ -1,0 +1,28 @@
+---
+# Copy to vars.yml and edit. vars.yml is gitignored.
+# All values below are placeholders (RFC 5737 documentation addresses).
+
+vcenter_server: vcenter.example.local
+vcenter_user: svc-ansible@vsphere.local
+vcenter_validate_certs: true      # set false only in a lab
+
+datacenter_name: Datacenter
+cluster_name: Cluster
+datastore_name: datastore-01
+template_name: ubuntu-2204-template
+vm_folder: "/{{ datacenter_name }}/vm/automation-test"
+
+vm_name: vm-demo-01
+vm_cpus: 2
+vm_memory_mb: 4096
+
+vm_network: vm-network-01        # vCenter port group name
+vm_ip: 192.0.2.10
+vm_netmask: 255.255.255.0
+vm_gateway: 192.0.2.1
+vm_domain: example.local
+vm_dns_servers:
+  - 192.0.2.53
+  - 198.51.100.53
+
+check_ip_free: true              # fail early if the target IP already answers ping

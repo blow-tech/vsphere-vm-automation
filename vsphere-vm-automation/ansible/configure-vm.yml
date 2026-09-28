@@ -1,0 +1,24 @@
+---
+- name: Baseline configuration
+  hosts: new_vms
+  become: true
+  tasks:
+    - name: Update apt cache and apply safe upgrades
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: safe
+
+    - name: Install baseline tools
+      ansible.builtin.apt:
+        name:
+          - chrony
+          - curl
+          - vim
+          - htop
+        state: present
+
+    - name: Ensure chrony is enabled and running
+      ansible.builtin.systemd:
+        name: chrony
+        enabled: true
+        state: started
