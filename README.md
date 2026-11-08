@@ -1,3 +1,5 @@
+> **Pending safety remediation:** read [REMEDIATION-2026-11.md](REMEDIATION-2026-11.md) before using deployment or collection examples. No production validation is implied.
+
 # vsphere-vm-automation
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)

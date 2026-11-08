@@ -3,12 +3,13 @@
   hosts: localhost
   gather_facts: false
   tasks:
-    - name: Check that the target IP is not already in use
-      ansible.builtin.command: "ping -c 1 -W 2 {{ vm_ip }}"
-      register: ip_probe
-      changed_when: false
-      failed_when: ip_probe.rc == 0
-      when: check_ip_free | bool
+    - name: Require reviewed address reservation before deployment
+      ansible.builtin.assert:
+        that:
+          - ipam_reservation_confirmed | default(false) | bool
+          - ipam_reserved_ip | default('') == vm_ip
+          - vcenter_validate_certs | bool
+        fail_msg: "Verify this exact address in authoritative IPAM/DHCP and configure trusted vCenter certificates. Ping silence is not availability evidence."
 
     - name: Clone template and customize
       community.vmware.vmware_guest:
@@ -40,7 +41,7 @@
         wait_for_ip_address: true
         wait_for_customization: true
       register: vm_result
-      no_log: false   # password is passed via vault var; module masks it in output
+      no_log: true
 
     - name: Show result
       ansible.builtin.debug:
