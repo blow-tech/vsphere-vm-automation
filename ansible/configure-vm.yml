@@ -3,10 +3,11 @@
   hosts: new_vms
   become: true
   tasks:
-    - name: Update apt cache and apply safe upgrades
+    - name: Apply upgrades only in an approved patch window
       ansible.builtin.apt:
         update_cache: true
         upgrade: safe
+      when: approved_patch_window | default(false) | bool
 
     - name: Install baseline tools
       ansible.builtin.apt:
